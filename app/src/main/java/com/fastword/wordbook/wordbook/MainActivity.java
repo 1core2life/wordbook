@@ -1,23 +1,14 @@
 package com.fastword.wordbook.wordbook;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -29,7 +20,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private InterstitialAd interstitialAd;
-
 
     static boolean isServiceOn = true;
     final WordDatabaseHelper db = new WordDatabaseHelper(this);
@@ -43,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
     private Animation fabOpen, fabClose;
     private Boolean isFabOpen = false;
     FloatingActionButton fab,fabSetting,fabAdd;
+
+    private boolean isTutorialOn = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,22 +61,6 @@ public class MainActivity extends AppCompatActivity {
         // 리스트뷰 참조 및 Adapter달기
         listview =  findViewById(R.id.listview);
         listview.setAdapter(adapter);
-
-
-
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView parent, View v, int position, long id) {
-                // get item
-                Word item = (Word) parent.getItemAtPosition(position) ;
-
-                String titleStr = item.getWordTarget() ;
-                String descStr = item.getWordMeaning() ;
-
-                Toast.makeText(MainActivity.this, titleStr, Toast.LENGTH_SHORT).show();
-                // TODO : use item data.
-            }
-        }) ;
 
         loadWordList();
 
@@ -114,6 +90,13 @@ public class MainActivity extends AppCompatActivity {
         setFullAd();
 
         startLockScreen();
+
+        if(isTutorialOn){
+            Intent intent = new Intent(this,TutorialActivity.class);
+            startActivity(intent);
+
+            isTutorialOn = false;
+        }
 
     }
 
@@ -271,6 +254,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
         isServiceOn = pref.getBoolean("service",false);
         colorNum = pref.getInt("backgroundColor",0);
+        isTutorialOn = pref.getBoolean("isTutorialOn", true);
         changeColor();
     }
 
@@ -284,18 +268,18 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void setFullAd() {
-        interstitialAd = new InterstitialAd(this); //새 광고를 만듭니다.
-        interstitialAd.setAdUnitId(getResources().getString(R.string.ad)); //이전에 String에 저장해 두었던 광고 ID를 전면 광고에 설정합니다.
-        AdRequest adRequest1 = new AdRequest.Builder().build(); //새 광고요청
-        interstitialAd.loadAd(adRequest1); //요청한 광고를 load 합니다.
+        interstitialAd = new InterstitialAd(this);
+        interstitialAd.setAdUnitId(getResources().getString(R.string.ad));
+        AdRequest adRequest1 = new AdRequest.Builder()
+                .build();
+        interstitialAd.loadAd(adRequest1);
         interstitialAd.setAdListener(new AdListener() { //전면 광고의 상태를 확인하는 리스너 등록
 
             @Override
-            public void onAdClosed() { //전면 광고가 열린 뒤에 닫혔을 때
+            public void onAdClosed() {
                 AdRequest adRequest1 = new AdRequest.Builder()
-                        .addTestDevice("B3EEABB8EE11C2BE770B684D95219ECB")
-                        .build();  //새 광고요청
-                interstitialAd.loadAd(adRequest1); //요청한 광고를 load 합니다.
+                        .build();
+                interstitialAd.loadAd(adRequest1);
             }
         });
 
@@ -305,7 +289,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-        interstitialAd.show();
+        if(interstitialAd.isLoaded())
+            interstitialAd.show();
+        else
+            interstitialAd.loadAd(new AdRequest.Builder().build());
 
         super.onBackPressed();
     }

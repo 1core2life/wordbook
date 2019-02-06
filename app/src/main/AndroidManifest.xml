@@ -55,7 +55,10 @@
         <service
             android:name=".RestartService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
+
+        <activity android:name=".TutorialActivity"
+            android:theme="@style/Theme.Transparent"></activity>
     </application>
 
 </manifest>

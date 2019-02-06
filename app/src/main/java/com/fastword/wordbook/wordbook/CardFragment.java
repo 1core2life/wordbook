@@ -1,25 +1,14 @@
 package com.fastword.wordbook.wordbook;
 
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import me.grantland.widget.AutofitHelper;
-
-import static android.util.TypedValue.COMPLEX_UNIT_DIP;
-
 public class CardFragment extends Fragment {
-
-    int TARGET_TEXT_SIZE_DP = 50;
 
     TextView target , meaning;
 

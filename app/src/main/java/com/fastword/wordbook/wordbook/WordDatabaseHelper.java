@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,11 +101,13 @@ public class WordDatabaseHelper extends SQLiteOpenHelper {
         return drinkList;
     }
 
+    /*
     public void deleteAll() {
 
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_WORD,null,null);
     }
+    */
 
     // Delete Column
     public void deleteOne(String targ) {

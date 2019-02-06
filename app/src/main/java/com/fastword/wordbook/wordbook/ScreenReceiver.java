@@ -2,11 +2,8 @@ package com.fastword.wordbook.wordbook;
 
 import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
-import android.util.Log;
 
 import java.util.Iterator;
 import java.util.List;

@@ -78,8 +78,9 @@ public class WordListViewAdapter extends BaseAdapter{
 
     }
 
+    /*
     public void clear() {
         listViewItemList.clear();
     }
-
+    */
 }
